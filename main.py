@@ -4,9 +4,14 @@ from flask.json import JSONEncoder
 from bson import json_util
 from mongoengine.base import BaseDocument
 from mongoengine.queryset.base import BaseQuerySet
-from resources.HotelResource import HotelResource
+from resources.Hotel import Hotel
+from resources.Guest import Guest
+# from resources.Session import Session
+from resources.Item import Item
+from resources.Room import Room
 from database.db import initialize_db
-
+# from jwt import exceptions as jwt_exception
+# from flask_jwt_extended import JWTManager
 
 class MongoEngineJSONEncoder(JSONEncoder):
     def default(self, obj):
@@ -20,64 +25,40 @@ class MongoEngineJSONEncoder(JSONEncoder):
 app = Flask(__name__)  # Create an instance of this class.
 app.config['MONGODB_SETTINGS'] = {
     'db': 'app-rest',
-    'host': 'mongodb://localhost:27017/app-rest'
+    'host': 'mongodb://localhost:27017/app-test'
 }
+# app.config['JWT_SECRET_KEY'] = 'idk'  # Change this!
+# app.config['PROPAGATE_EXCEPTIONS'] = True
 initialize_db(app)
+# jwt = JWTManager(app)
 app.json_encoder = MongoEngineJSONEncoder
 api = Api(app)  # main entry point of the application. You need to initialize it with a Flask Application object (app)
 #
 # headers = {'Content-Type': 'application/json'}
 
 
-#
-# @app.route('/api/guests')
-# class Guest(Resource):
-#     def get(self):
-#         get_parser = reqparse.RequestParser()  # From flask library.
-#         get_parser.add_argument('id', type=str, location='args', required=True)
-#         get_parser.add_argument('f_name', type=str, location='args', required=True)
-#         get_parser.add_argument('l_name', type=str, location='args', required=True)
-#         get_parser.add_argument('phone', type=int, location='args', required=True)
-#         get_parser.add_argument('email', type=str, location='args', required=True)
-#         args = get_parser.parse_args()  # Stores value of "id" (and any other query params), defaults to None.
-#
-#
-# @app.route('/api/rooms')
-# class Room(Resource):
-#     def get(self):
-#         get_parser = reqparse.RequestParser()  # From flask library.
-#         get_parser.add_argument('hotel_id', type=str, location='args', required=True)
-#         get_parser.add_argument('model', type=str, location='args', required=True)
-#         get_parser.add_argument('id', type=str, location='args', required=True)
-#         get_parser.add_argument('capacity', type=int, location='args', required=True)
-#         get_parser.add_argument('price', type=int, location='args', required=True)
-#         get_parser.add_argument('img', type=list, location='args', required=False)
-#         get_parser.add_argument('rating', type=int, location='args', required=False)
-#         args = get_parser.parse_args()  # Stores value of "id" (and any other query params), defaults to None.
-#
-#
-# @app.route('/api/items')
-# class Item(Resource):
-#     def get(self):
-#         get_parser = reqparse.RequestParser()  # From flask library.
-#         get_parser.add_argument('hotel_id', type=str, location='args', required=True)
-#         get_parser.add_argument('name', type=str, location='args', required=True)
-#         get_parser.add_argument('id', type=str, location='args', required=True)
-#         get_parser.add_argument('stock', type=int, location='args', required=True)
-#         get_parser.add_argument('price', type=int, location='args', required=True)
-#         get_parser.add_argument('img', type=list, location='args', required=False)
-#         get_parser.add_argument('rating', type=int, location='args', required=False)
-#         args = get_parser.parse_args()  # Stores value of "id" (and any other query params), defaults to None.
-
-
-api.add_resource(HotelResource,
+api.add_resource(Hotel,
                  '/hotel',
                  '/hotel/',
                  '/hotel/<string:hotel_id>')
 
+api.add_resource(Guest,
+                 '/guest',
+                 '/guest/',
+                 '/guest/<string:guest_id>')
+
+api.add_resource(Item,
+                 '/hotel/<string:hotel_id>/item')
+
+api.add_resource(Room,
+                 '/hotel/<string:hotel_id>/room')
+
+# api.add_resource(Session, '/session')
+
 
 @app.route('/')
 def hello_world():
+    # raise jwt_exception.ExpiredSignatureError
     return "Yay! Your web application is running fine!"
 
 
