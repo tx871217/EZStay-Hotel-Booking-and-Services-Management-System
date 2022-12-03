@@ -10,6 +10,7 @@ from resources.Session import Session
 from resources.Item import Item
 from resources.Room import Room
 from resources.User import User
+from resources.Reservation import Reservation
 from database.db import initialize_db
 from jwt import exceptions as jwt_exception
 from flask_jwt_extended import JWTManager
@@ -53,6 +54,9 @@ api.add_resource(Item,
 
 api.add_resource(Room,
                  '/hotel/<string:hotel_id>/room')
+
+api.add_resource(Reservation,
+                 '/guest/<string:guest_id>/reservation')
 
 api.add_resource(Session, '/session')
 
