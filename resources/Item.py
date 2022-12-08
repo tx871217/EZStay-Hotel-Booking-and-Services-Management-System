@@ -3,6 +3,10 @@ from flask import make_response  # returns an HTML response
 from services.HotelService import *
 from services.ItemService import *
 
+parser = reqparse.RequestParser()
+parser.add_argument('begin', type=int, location='args')
+parser.add_argument('end', type=int, location='args')
+
 post_parser = reqparse.RequestParser()
 post_parser.add_argument('name', type=str, default="")
 post_parser.add_argument('price', type=int, default=0)
@@ -15,6 +19,8 @@ class Item(Resource):
     def get(self, hotel_id):
         # hotel = get_hotel_by_id(hotel_id)
         items = get_items_by_hotel(hotel_id)
+        args = parser.parse_args()
+        items = items[args.begin:args.end]
         return make_response(items.to_json(), 200, headers)
 
     def post(self, hotel_id):

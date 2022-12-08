@@ -35,7 +35,6 @@ initialize_db(app)
 jwt = JWTManager(app)
 app.json_encoder = MongoEngineJSONEncoder
 api = Api(app)  # main entry point of the application. You need to initialize it with a Flask Application object (app)
-#
 # headers = {'Content-Type': 'application/json'}
 
 
@@ -50,7 +49,8 @@ api.add_resource(Guest,
                  '/guest/<string:guest_id>')
 
 api.add_resource(Item,
-                 '/hotel/<string:hotel_id>/item')
+                 '/hotel/<string:hotel_id>/item',
+                 '/hotel/<string:hotel_id>/item/<string:pagesize>')
 
 api.add_resource(Room,
                  '/hotel/<string:hotel_id>/room')
