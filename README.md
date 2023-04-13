@@ -2,3 +2,5 @@
 
 backend system includes booking, room services, item management, guests/users management
 database: mongoDB
+
+*sketchy public version to connect APIs
